@@ -1,71 +1,38 @@
-<mxfile host="app.diagrams.net" modified="2022-02-24T10:47:03.042Z" agent="5.0 (X11)" etag="jvmyYhWUkadPvAU8XjGI" version="15.3.0" type="github">
+<mxfile host="app.diagrams.net" modified="2022-02-24T11:08:38.159Z" agent="5.0 (X11)" etag="xk6HqiNqByPNCJBIG537" version="15.3.0" type="github">
   <diagram id="4yUx7ruBs_Eudp0IDvnB" name="Page-1">
     <mxGraphModel dx="1422" dy="792" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-16" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="250" y="100" width="550" height="490" as="geometry" />
+        </mxCell>
         <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-1" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="350" y="350" width="30" height="60" as="geometry" />
+          <mxGeometry x="100" y="360" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-2" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="250" y="250" width="30" height="60" as="geometry" />
+        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-9" value="&lt;div&gt;Poster des postes courts (PP)&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="260" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-3" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="200" y="450" width="30" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-4" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="120" y="320" width="30" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-5" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;" edge="1" parent="1" source="Uj74ye2kD6-Ec4Vy9ErR-3" target="Uj74ye2kD6-Ec4Vy9ErR-1">
-          <mxGeometry width="100" height="100" relative="1" as="geometry">
-            <mxPoint x="240" y="490" as="sourcePoint" />
-            <mxPoint x="340" y="390" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-6" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;" edge="1" parent="1" source="Uj74ye2kD6-Ec4Vy9ErR-1" target="Uj74ye2kD6-Ec4Vy9ErR-4">
-          <mxGeometry width="100" height="100" relative="1" as="geometry">
-            <mxPoint x="270" y="420" as="sourcePoint" />
-            <mxPoint x="370" y="320" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-7" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;" edge="1" parent="1" source="Uj74ye2kD6-Ec4Vy9ErR-4" target="Uj74ye2kD6-Ec4Vy9ErR-2">
-          <mxGeometry width="100" height="100" relative="1" as="geometry">
-            <mxPoint x="190" y="430" as="sourcePoint" />
-            <mxPoint x="290" y="330" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-9" value="&lt;div&gt;Poster des postes courts&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="520" y="250" width="120" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-11" value="" style="endArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="Uj74ye2kD6-Ec4Vy9ErR-1" target="Uj74ye2kD6-Ec4Vy9ErR-9">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="450" y="430" as="sourcePoint" />
-            <mxPoint x="500" y="380" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-12" value="Publier des articles" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="520" y="370" width="120" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-13" value="" style="endArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="Uj74ye2kD6-Ec4Vy9ErR-1" target="Uj74ye2kD6-Ec4Vy9ErR-12">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="400" y="440" as="sourcePoint" />
-            <mxPoint x="450" y="390" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-12" value="&lt;div&gt;Publier des articles (PP)&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="360" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-14" value="Discussions privés" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="520" y="480" width="120" height="80" as="geometry" />
+          <mxGeometry x="270" y="480" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-15" value="" style="endArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="Uj74ye2kD6-Ec4Vy9ErR-1" target="Uj74ye2kD6-Ec4Vy9ErR-14">
+        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-21" value="&lt;div&gt;Consulter postes/articles AU&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="270" y="160" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-22" value="" style="endArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;jumpSize=10;strokeWidth=5;" edge="1" parent="1" source="Uj74ye2kD6-Ec4Vy9ErR-1" target="Uj74ye2kD6-Ec4Vy9ErR-16">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="370" y="380" as="sourcePoint" />
-            <mxPoint x="500" y="380" as="targetPoint" />
+            <mxPoint x="140" y="415" as="sourcePoint" />
+            <mxPoint x="190" y="365" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-16" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="500" y="220" width="160" height="360" as="geometry" />
+        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-23" value="Consulter postes AU" style="ellipse;whiteSpace=wrap;html=1;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="410" y="160" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-20" value="" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="550" y="140" width="60" height="60" as="geometry" />
+        <mxCell id="Uj74ye2kD6-Ec4Vy9ErR-24" value="&lt;div&gt;Suivre AU&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="410" y="260" width="120" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
