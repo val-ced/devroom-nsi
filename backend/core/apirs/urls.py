@@ -39,5 +39,9 @@ urlpatterns = [
     path("user/", views.MeAPIView.as_view()) ,
     path("user/followers/", views.MeFollowersAPIView.as_view(), name='user-followers') ,
     path("user/following/", views.MeFollowingAPIView.as_view(), name='user-following') ,
+    path("user/articles/", views.UserArticleAPIView.as_view()) ,
+    path("user/posts/", views.UserPostsAPIView.as_view()) ,
+    path("user/posts/new/", views.PostCreateAPIView.as_view(), name="post-create") ,
+    path("user/posts/<str:id>/delete/", views.PostDestroyAPIView.as_view(), name="post-destroy") ,
     path("user/register/", views.UserRegisterAPIView.as_view(), name='user-register') ,
 ]

@@ -3,9 +3,10 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .models import Article, Post, User
-from .serializers import ArticleSerializer, PostSerializer, UserLessSerializer, UserRegisterSerializer, UserSerializer
+from .serializers import ArticleSerializer, PostSerializer, UserLessSerializer, UserRegisterSerializer, UserSerializer, serialize_user
 
 
 # Create your views here.
@@ -85,8 +86,11 @@ class UserArticleAPIView(ListAPIView):
     lookup_field = "at"
 
     def get_queryset(self):
-        user = User.objects.get(at=self.kwargs.get(self.lookup_field))
-        articles = [a for i in user.articles_id if (a:=Article.objects.get(id=i)) and a.is_public]
+        if (at:=self.kwargs.get(self.lookup_field)):
+            user = User.objects.get(at=at)
+        else:
+            user = self.request.user
+        articles = [a for i in user.articles_id if (a:=Article.objects.get(id=i))]
         return articles
 
 
@@ -95,8 +99,13 @@ class UserPostsAPIView(ListAPIView):
     lookup_field = "at"
 
     def get_queryset(self):
-        user = User.objects.get(at=self.kwargs.get(self.lookup_field))
-        posts = [p for i in user.posts_id if (p:=Post.objects.get(id=i)) and p.is_public]
+        if (at:=self.kwargs.get(self.lookup_field)):
+            user = User.objects.get(at=at)
+        elif self.request.user.is_authenticated:
+            user = self.request.user
+        else:
+            raise Http404
+        posts = [p for i in user.posts_id if (p:=Post.objects.get(id=i))]
         return posts
 
 
@@ -111,6 +120,23 @@ class PostAPIView(RetrieveAPIView):
         return post
         # raise Http404()
 
+
+class PostCreateAPIView(CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer: PostSerializer):
+        serializer.save(author=self.request.user)
+        return Response(serializer.data)
+
+
+class PostDestroyAPIView(DestroyAPIView):
+    queryset = Post.objects.all()
+    serialize_class = PostSerializer
+    lookup_field = "id"
+    
+    permission_classes = [IsAuthenticated]
 
 class CommentsAPIView(ListAPIView):
     serializer_class = PostSerializer

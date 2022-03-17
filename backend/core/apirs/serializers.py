@@ -115,7 +115,7 @@ class ArticleSerializer(srz.ModelSerializer):
     comments = srz.SerializerMethodField(read_only=True)
 
     def get_comments(self, instance):
-        return len(instance.comments_id)
+        return len(instance.comments_id) if instance.comments_id else 0
 
 
     def get_author(self, instance):
@@ -146,7 +146,7 @@ class PostSerializer(srz.ModelSerializer):
     comments = srz.SerializerMethodField(read_only=True)
 
     def get_comments(self, instance):
-        return len(instance.comments_id)
+        return len(instance.comments_id) if instance.comments_id else 0
 
 
     def get_parent(self, instance):
