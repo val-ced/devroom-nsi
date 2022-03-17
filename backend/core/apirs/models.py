@@ -72,7 +72,7 @@ class Post(models.Model):
     comments = models.ArrayReferenceField(to="Post", blank=True, related_name="my_comments", on_delete=models.CASCADE)
     date = models.DateTimeField(default=now, editable=False)
     parent = models.ForeignKey(to="Post", related_name="my_parent", on_delete=models.CASCADE, null=True, blank=True)
-    is_public = models.BooleanField(default=True)
+    # is_public = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return "<Post %s>" % self.id
@@ -91,7 +91,7 @@ class Article(models.Model):
     body = models.TextField(null=False, blank=False)
     comments = models.ArrayReferenceField(to="Post", blank=True, on_delete=models.CASCADE)
     date = models.DateTimeField(default=now, editable=False)
-    is_public = models.BooleanField(default=True)
+    # is_public = models.BooleanField(default=True)
 
 
 @receiver(post_save, sender=Article)

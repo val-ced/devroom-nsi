@@ -107,9 +107,9 @@ class PostAPIView(RetrieveAPIView):
 
     def get_object(self):
         post = get_object_or_404(Post, id=self.kwargs.get(self.lookup_field))
-        if post.is_public:
-            return post
-        raise Http404()
+        # if post.is_public:
+        return post
+        # raise Http404()
 
 
 class CommentsAPIView(ListAPIView):
@@ -151,6 +151,5 @@ class ArticleAPIView(RetrieveAPIView):
 
     def get_object(self):
         article = get_object_or_404(Article, id=self.kwargs.get(self.lookup_field))
-        if article.is_public:
-            return article
-        raise Http404()
+        # if article.is_public:
+        return article
