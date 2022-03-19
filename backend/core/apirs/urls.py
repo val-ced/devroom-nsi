@@ -16,9 +16,9 @@ from . import views
 urlpatterns = [
     path("", views.routes),
     # Auth
-    path('token/', TokenObtainPairView.as_view(), name='token-obtain-pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
-    path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),
+    path('user/auth/token/', TokenObtainPairView.as_view(), name='token-obtain-pair'),
+    path('user/auth/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+    path('user/auth/token/verify/', TokenVerifyView.as_view(), name='token-verify'),
 
     # Public information on users
     path("users/<str:at>/", views.UserAPIView.as_view(), name="user-detail") ,
@@ -37,11 +37,40 @@ urlpatterns = [
 
     # Private information on current user
     path("user/", views.MeAPIView.as_view()) ,
+    # List followers
     path("user/followers/", views.MeFollowersAPIView.as_view(), name='user-followers') ,
+    # List following
     path("user/following/", views.MeFollowingAPIView.as_view(), name='user-following') ,
+    # List articles
     path("user/articles/", views.UserArticleAPIView.as_view()) ,
+    # Create a new article
+    path("user/articles/new/", views.ArticleCreateAPIView.as_view(), name='article-create') ,
+    # Delete an article
+    path("user/articles/<str:id>/delete/", views.ArticleDestroyAPIView.as_view(), name='article-destroy') ,
+    # Update an article
+    path("user/articles/<str:id>/edit/", views.ArticleEditAPIView.as_view(), name='article-edit') ,
+    # Comment an article
+    # It doesn't have to be the own user's article
+    path("user/articles/<str:id>/comment/", views.CommentArticleAPIView.as_view(), name='article-comment') ,
+    # Like an article
+    # It doesn't have to be the own user's article
+    path("user/articles/<str:id>/like/", views.CommentArticleAPIView.as_view(), name='article-like') ,
+    # List user's posts
     path("user/posts/", views.UserPostsAPIView.as_view()) ,
+    # List user's comments
+    path("user/comments/", views.UserCommentsAPIView.as_view()) ,
+    # Create a new post
     path("user/posts/new/", views.PostCreateAPIView.as_view(), name="post-create") ,
+    # Add a comment to the refered post.
+    # It doesn't have to be the own user's post/comment
+    path("user/posts/<str:id>/comment/", views.CommentCreateAPIView.as_view(), name="post-comment") ,
+    # Like a post/comment.
+    # It doesn't have to be the own user's post/comment
+    path("user/posts/<str:id>/like/", views.CommentCreateAPIView.as_view(), name="post-like") ,
+    # Edit a post/comment
+    path("user/posts/<str:id>/edit/", views.PostEditAPIView.as_view(), name="post-edit") ,
+    # Delete posts and comments
     path("user/posts/<str:id>/delete/", views.PostDestroyAPIView.as_view(), name="post-destroy") ,
+    # Register a new user
     path("user/register/", views.UserRegisterAPIView.as_view(), name='user-register') ,
 ]

@@ -1,12 +1,12 @@
-from django.http import Http404
+from django.http import Http404, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, DestroyAPIView
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from .models import Article, Post, User
-from .serializers import ArticleSerializer, PostSerializer, UserLessSerializer, UserRegisterSerializer, UserSerializer, serialize_user
+from .serializers import ArticleSerializer, CreateCommentSerializer, PostSerializer, UserLessSerializer, UserRegisterSerializer, UserSerializer
 
 
 # Create your views here.
@@ -98,6 +98,8 @@ class UserPostsAPIView(ListAPIView):
     serializer_class = PostSerializer
     lookup_field = "at"
 
+    type = "P"
+
     def get_queryset(self):
         if (at:=self.kwargs.get(self.lookup_field)):
             user = User.objects.get(at=at)
@@ -105,8 +107,11 @@ class UserPostsAPIView(ListAPIView):
             user = self.request.user
         else:
             raise Http404
-        posts = [p for i in user.posts_id if (p:=Post.objects.get(id=i))]
+        posts = [p for i in user.posts_id if (p:=Post.objects.get(id=i)) and p.type == self.type]
         return posts
+
+class UserCommentsAPIView(UserPostsAPIView):
+    type = "C"
 
 
 class PostAPIView(RetrieveAPIView):
@@ -120,6 +125,30 @@ class PostAPIView(RetrieveAPIView):
         return post
         # raise Http404()
 
+class ArticleCreateAPIView(CreateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer: ArticleSerializer):
+        serializer.save(author=self.request.user)
+
+class ArticleDestroyAPIView(RetrieveDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    lookup_field = "id"
+    
+    permission_classes = [IsAuthenticated]
+
+
+class ArticleEditAPIView(RetrieveUpdateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    lookup_field = "id"
+    
+    permission_classes = [IsAuthenticated]
+
+    
 
 class PostCreateAPIView(CreateAPIView):
     queryset = Post.objects.all()
@@ -130,10 +159,28 @@ class PostCreateAPIView(CreateAPIView):
         serializer.save(author=self.request.user)
         return Response(serializer.data)
 
+class CommentArticleAPIView(PostCreateAPIView):
+    def perform_create(self, serializer: PostSerializer):
+        article: Article | None = Article.objects.get(id=self.kwargs.get("id"))
+        if article:
+            instance = serializer.save(author=self.request.user, type="C")
+            article.comments.add(instance)
+            article.save()
+            return Response(serializer.data)
+        
+        
 
-class PostDestroyAPIView(DestroyAPIView):
+class PostDestroyAPIView(RetrieveDestroyAPIView):
     queryset = Post.objects.all()
-    serialize_class = PostSerializer
+    serializer_class = PostSerializer
+    lookup_field = "id"
+    
+    permission_classes = [IsAuthenticated]
+
+
+class PostEditAPIView(RetrieveUpdateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
     lookup_field = "id"
     
     permission_classes = [IsAuthenticated]
@@ -169,6 +216,21 @@ class CommentsAPIView(ListAPIView):
             
         return comments
 
+class CommentCreateAPIView(CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = CreateCommentSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "id"
+
+    def perform_create(self, serializer: CreateCommentSerializer):
+        parent: Post | None = Post.objects.get(id=self.kwargs.get(self.lookup_field))
+        if not parent is None:
+            instance = serializer.save(author=self.request.user, parent=parent, type="C")
+            parent.comments.add(instance)
+            parent.save()
+            return Response(serializer.data)
+        
+        raise HttpResponseNotFound
 
 class ArticleAPIView(RetrieveAPIView):
     queryset = Article.objects.all()

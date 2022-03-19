@@ -1,3 +1,4 @@
+from random import choices
 import uuid
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -72,6 +73,17 @@ class Post(models.Model):
     comments = models.ArrayReferenceField(to="Post", blank=True, related_name="my_comments", on_delete=models.CASCADE)
     date = models.DateTimeField(default=now, editable=False)
     parent = models.ForeignKey(to="Post", related_name="my_parent", on_delete=models.CASCADE, null=True, blank=True)
+    
+    class _Type(models.TextChoices):
+        POST = 'P', _('Post')
+        COMMENT = 'C', _('Comment') 
+    
+    type = models.CharField(
+        max_length=1,
+        choices=_Type.choices,
+        default=_Type.POST
+    )
+
     # is_public = models.BooleanField(default=True)
 
     def __str__(self) -> str:
@@ -91,6 +103,7 @@ class Article(models.Model):
     body = models.TextField(null=False, blank=False)
     comments = models.ArrayReferenceField(to="Post", blank=True, on_delete=models.CASCADE)
     date = models.DateTimeField(default=now, editable=False)
+    title = models.TextField(max_length=200, null=False, blank=False)
     # is_public = models.BooleanField(default=True)
 
 
