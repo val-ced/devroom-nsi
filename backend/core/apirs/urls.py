@@ -27,6 +27,10 @@ urlpatterns = [
     path("users/<str:at>/articles/", views.UserArticleAPIView.as_view()) ,
     path("users/<str:at>/posts/", views.UserPostsAPIView.as_view()) ,
 
+    # Follow user
+    path("users/<str:at>/follow/", views.follow_user, name="user-follow") ,
+    path("users/<str:at>/unfollow/", views.unfollow_user, name="user-unfollow") ,
+
     # Public information on posts
     path("posts/<str:id>/", views.PostAPIView.as_view(), name="post-detail") ,
     path("posts/<str:id>/comments/", views.CommentsAPIView.as_view(), name="post-comments") ,
@@ -54,7 +58,10 @@ urlpatterns = [
     path("user/articles/<str:id>/comment/", views.CommentArticleAPIView.as_view(), name='article-comment') ,
     # Like an article
     # It doesn't have to be the own user's article
-    path("user/articles/<str:id>/like/", views.CommentArticleAPIView.as_view(), name='article-like') ,
+    path("user/articles/<str:id>/like/", views.like_article, name='article-like') ,
+    path("user/articles/<str:id>/unlike/", views.unlike_article, name='article-like') ,
+
+    path("user/articles/liked/", views.LikedArticlesAPIView.as_view(), name='article-like') ,
     # List user's posts
     path("user/posts/", views.UserPostsAPIView.as_view()) ,
     # List user's comments
@@ -66,11 +73,13 @@ urlpatterns = [
     path("user/posts/<str:id>/comment/", views.CommentCreateAPIView.as_view(), name="post-comment") ,
     # Like a post/comment.
     # It doesn't have to be the own user's post/comment
-    path("user/posts/<str:id>/like/", views.CommentCreateAPIView.as_view(), name="post-like") ,
+    path("user/posts/<str:id>/like/", views.like_post, name="post-like") ,
+    path("user/posts/<str:id>/unlike/", views.unlike_post, name="post-like") ,
     # Edit a post/comment
     path("user/posts/<str:id>/edit/", views.PostEditAPIView.as_view(), name="post-edit") ,
     # Delete posts and comments
     path("user/posts/<str:id>/delete/", views.PostDestroyAPIView.as_view(), name="post-destroy") ,
+    path("user/posts/liked/", views.LikedPostsAPIView.as_view(), name="posts-liked") ,
     # Register a new user
     path("user/register/", views.UserRegisterAPIView.as_view(), name='user-register') ,
 ]

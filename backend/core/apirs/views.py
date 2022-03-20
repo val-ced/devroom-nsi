@@ -1,9 +1,10 @@
-from django.http import Http404, HttpResponseNotFound
+from django.http import Http404, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView
+from rest_framework.request import HttpRequest
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from .models import Article, Post, User
 from .serializers import ArticleSerializer, CreateCommentSerializer, PostSerializer, UserLessSerializer, UserRegisterSerializer, UserSerializer
@@ -36,7 +37,7 @@ class UserFollowersAPIView(ListAPIView):
 
     def get_queryset(self):
         user = User.objects.get(at=self.kwargs.get(self.lookup_field))
-        following = [u for i in user.following_id if (u:=User.objects.get(id=i))]
+        following = [u for i in user.followers_id if (u:=User.objects.get(id=i))]
         return following
 
 
@@ -46,8 +47,8 @@ class UserFollowingAPIView(ListAPIView):
 
     def get_queryset(self):
         user = User.objects.get(at=self.kwargs.get(self.lookup_field))
-        followers = [u for i in user.followers_id if (u:=User.objects.get(id=i))]
-        return followers
+        following = [u for i in user.following_id if (u:=User.objects.get(id=i))]
+        return following
 
 
 class MeFollowingAPIView(ListAPIView):
@@ -241,3 +242,113 @@ class ArticleAPIView(RetrieveAPIView):
         article = get_object_or_404(Article, id=self.kwargs.get(self.lookup_field))
         # if article.is_public:
         return article
+
+class LikedPostsAPIView(ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        me = self.request.user
+        liked_posts = [Post.objects.get(id=id) for id in me.liked_posts_id]
+        return liked_posts
+        
+
+class LikedArticlesAPIView(ListAPIView):
+    serializer_class = ArticleSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        me = self.request.user
+        liked_articles = [Article.objects.get(id=id) for id in me.liked_articles_id]
+        return liked_articles
+
+@api_view(('PATCH',))
+@permission_classes((IsAuthenticated,))
+def follow_user(request: HttpRequest, at: str):
+    me: User = request.user
+    user = get_object_or_404(User, at=at)
+
+    if user == me:
+        return HttpResponseForbidden({"error": "You can not follow yourself."})
+
+    if me.id not in user.followers_id: 
+        user.followers.add(me)
+        user.save()
+        if user.id not in me.following_id:
+            me.following.add(user)
+            me.save()
+        return Response({"success": "You follow this user"})
+
+    return Response({"error": "You already follow this user."})
+
+@api_view(('PATCH',))
+@permission_classes((IsAuthenticated,))
+def unfollow_user(request: HttpRequest, at: str):
+    me: User = request.user
+    user = get_object_or_404(User, at=at)
+
+    if user == me:
+        return HttpResponseForbidden({"error": "You can not unfollow yourself."})
+
+    if me.id in user.followers_id:
+        user.followers.remove(me)
+        user.save()
+        if user.id in me.following_id:
+            me.following.remove(user)
+            me.save()
+        return Response({"success": "You unfollow this user"})
+
+    return Response({"error": "You do not follow this user."})
+
+
+def like_or_unlike(request: HttpRequest, id: str, type = "post", like: bool = True):
+    assert type == "post" or type == "article"
+    me = request.user
+    item = None
+    liked = None
+    if type == "post":
+        item = get_object_or_404(Post, id=id)
+        liked = me.liked_posts
+    elif type == "article":
+        item = get_object_or_404(Article, id=id)
+        liked = me.liked_articles
+
+    if liked:
+        if like:
+            item.likes += 1
+            item.save()
+            liked.add(item)
+            me.save()
+
+            return Response({"success": f"You liked this {type}."})
+
+        else:
+            item.likes -= 1
+            item.save()
+            liked.remove(item)
+            me.save()
+
+            return Response({"success": f"You unliked liked this {type}."})
+
+@api_view(('PATCH',))
+@permission_classes((IsAuthenticated,))
+def like_post(request: HttpRequest, id: str):
+    return like_or_unlike(request, id)
+
+    
+@api_view(('PATCH',))
+@permission_classes((IsAuthenticated,))
+def unlike_post(request: HttpRequest, id: str):
+    return like_or_unlike(request, id, like = False)
+
+
+@api_view(('PATCH',))
+@permission_classes((IsAuthenticated,))
+def like_article(request: HttpRequest, id: str):
+    return like_or_unlike(request, id, type = "article")
+
+
+@api_view(('PATCH',))
+@permission_classes((IsAuthenticated,))
+def unlike_article(request: HttpRequest, id: str):
+    return like_or_unlike(request, id, type = "article", like = False)
