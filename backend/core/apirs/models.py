@@ -55,6 +55,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     liked_articles = models.ArrayReferenceField(to="Article", default=[], related_name="my_liked_articles", editable=False)
     logo = djm.ImageField(upload_to="logos", default='')
     total_likes = djm.IntegerField(default=0, editable=False)
+    timeline_posts = models.ArrayReferenceField(to="Post", default=[], related_name="timeline_posts", editable=False)
+    timeline_articles = models.ArrayReferenceField(to="Article", default=[], related_name="timeline_articles", editable=False)
+    
 
     USERNAME_FIELD = "at"
     REQUIRED_FIELDS = ["username", "password"]
@@ -94,6 +97,11 @@ def add_to_author(sender, instance: Post, created: bool, *args, **kwargs):
     if created:
         instance.author.posts_id.add(instance.id)
         instance.author.save()
+        for _f_id in instance.author.followers_id:
+            follower = User.objects.get(id=_f_id)
+            follower.timeline_posts.add(instance)
+            follower.save()
+
 
 
 class Article(models.Model):
@@ -103,7 +111,7 @@ class Article(models.Model):
     body = models.TextField(null=False, blank=False)
     comments = models.ArrayReferenceField(to="Post", blank=True, on_delete=models.CASCADE)
     date = models.DateTimeField(default=now, editable=False)
-    title = models.TextField(max_length=200, null=False, blank=False)
+    title = models.TextField(max_length=200, null=False, blank=False, default="Default title")
     # is_public = models.BooleanField(default=True)
 
 
@@ -112,5 +120,9 @@ def add_to_author(sender, instance: Article, created: bool, *args, **kwargs):
     if created:
         instance.author.articles_id.add(instance.id)
         instance.author.save()
+        for _f_id in instance.author.followers_id:
+            follower = User.objects.get(id=_f_id)
+            follower.timeline_articles.add(instance)
+            follower.save()
 
 

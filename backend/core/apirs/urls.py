@@ -34,10 +34,22 @@ urlpatterns = [
     # Public information on posts
     path("posts/<str:id>/", views.PostAPIView.as_view(), name="post-detail") ,
     path("posts/<str:id>/comments/", views.CommentsAPIView.as_view(), name="post-comments") ,
+    # Like a post/comment.
+    # It doesn't have to be the own user's post/comment
+    path("posts/<str:id>/like/", views.like_post, name="post-like") ,
+    path("posts/<str:id>/unlike/", views.unlike_post, name="post-like") ,
+    # Add a comment to the refered post.
+    # It doesn't have to be the own user's post/comment
+    path("posts/<str:id>/comment/", views.CommentCreateAPIView.as_view(), name="post-comment") ,
 
     # Public information on articles
     path("articles/<str:id>/", views.ArticleAPIView.as_view(), name="article-detail") ,
     path("articles/<str:id>/comments/", views.CommentsAPIView.as_view(), name="article-comments") ,
+    path("articles/<str:id>/comment/", views.CommentArticleAPIView.as_view(), name='article-comment') ,
+    # Like an article
+    # It doesn't have to be the own user's article
+    path("articles/<str:id>/like/", views.like_article, name='article-like') ,
+    path("articles/<str:id>/unlike/", views.unlike_article, name='article-like') ,
 
     # Private information on current user
     path("user/", views.MeAPIView.as_view()) ,
@@ -55,11 +67,6 @@ urlpatterns = [
     path("user/articles/<str:id>/edit/", views.ArticleEditAPIView.as_view(), name='article-edit') ,
     # Comment an article
     # It doesn't have to be the own user's article
-    path("user/articles/<str:id>/comment/", views.CommentArticleAPIView.as_view(), name='article-comment') ,
-    # Like an article
-    # It doesn't have to be the own user's article
-    path("user/articles/<str:id>/like/", views.like_article, name='article-like') ,
-    path("user/articles/<str:id>/unlike/", views.unlike_article, name='article-like') ,
 
     path("user/articles/liked/", views.LikedArticlesAPIView.as_view(), name='article-like') ,
     # List user's posts
@@ -68,18 +75,14 @@ urlpatterns = [
     path("user/comments/", views.UserCommentsAPIView.as_view()) ,
     # Create a new post
     path("user/posts/new/", views.PostCreateAPIView.as_view(), name="post-create") ,
-    # Add a comment to the refered post.
-    # It doesn't have to be the own user's post/comment
-    path("user/posts/<str:id>/comment/", views.CommentCreateAPIView.as_view(), name="post-comment") ,
-    # Like a post/comment.
-    # It doesn't have to be the own user's post/comment
-    path("user/posts/<str:id>/like/", views.like_post, name="post-like") ,
-    path("user/posts/<str:id>/unlike/", views.unlike_post, name="post-like") ,
     # Edit a post/comment
     path("user/posts/<str:id>/edit/", views.PostEditAPIView.as_view(), name="post-edit") ,
     # Delete posts and comments
     path("user/posts/<str:id>/delete/", views.PostDestroyAPIView.as_view(), name="post-destroy") ,
     path("user/posts/liked/", views.LikedPostsAPIView.as_view(), name="posts-liked") ,
+    path("user/timeline/", views.LikedPostsAPIView.as_view(), name="timeline") ,
+    path("user/timeline/articles/", views.TimelineArticlesAPIView.as_view(), name="timeline-articles") ,
+    path("user/timeline/posts/", views.TimelinePostsAPIView.as_view(), name="timeline-posts") ,
     # Register a new user
     path("user/register/", views.UserRegisterAPIView.as_view(), name='user-register') ,
 ]

@@ -73,7 +73,7 @@ class UserSerializer(srz.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('at', 'username', 'bio', 'followers', 'following', 'last_login', 'created_on', 'is_public', 'total_likes', 'articles', 'posts', 'logo', 'total_likes', 'is_active', 'following_url', 'followers_url')
+        fields = ('at', 'username', 'bio', 'followers', 'following', 'last_login', 'created_on', 'is_public', 'total_likes', 'articles', 'posts', 'logo', 'total_likes', 'is_active', 'following_url', 'followers_url', 'timeline_posts', 'timeline_articles')
 
 
 class UserRegisterSerializer(UserSerializer):

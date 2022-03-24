@@ -352,3 +352,44 @@ def like_article(request: HttpRequest, id: str):
 @permission_classes((IsAuthenticated,))
 def unlike_article(request: HttpRequest, id: str):
     return like_or_unlike(request, id, type = "article", like = False)
+
+
+class TimelineAPIView(ListAPIView):
+    serializer_class_articles = ArticleSerializer
+    serializer_class_posts = PostSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset_articles(self):
+        user = self.request.user
+        articles = [Article.objects.get(id=a) for a in user.timeline_articles_id]
+        return articles
+
+
+    def get_queryset_posts(self):
+        user = self.request.user
+        posts = [Post.objects.get(id=a) for a in user.timeline_posts_id]
+        return posts
+
+    
+    def list(self, request, *args, **kwargs):
+        pass
+        
+
+class TimelinePostsAPIView(ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        user = self.request.user
+        posts = [Post.objects.get(id=a) for a in user.timeline_posts_id]
+        return posts
+
+
+class TimelineArticlesAPIView(ListAPIView):
+    serializer_class = ArticleSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        user = self.request.user
+        articles = [Article.objects.get(id=a) for a in user.timeline_articles_id]
+        return articles
