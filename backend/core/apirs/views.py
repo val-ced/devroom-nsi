@@ -301,57 +301,52 @@ def unfollow_user(request: HttpRequest, at: str):
     return Response({"error": "You do not follow this user."})
 
 
-def like_or_unlike(request: HttpRequest, id: str, type = "post", like: bool = True):
+def like_or_unlike(request: HttpRequest, id: str, type = "post"):
     assert type == "post" or type == "article"
     me = request.user
     item = None
     liked = None
+    liked_ids = None
     if type == "post":
         item = get_object_or_404(Post, id=id)
         liked = me.liked_posts
+        liked_ids = me.liked_posts_id
     elif type == "article":
         item = get_object_or_404(Article, id=id)
         liked = me.liked_articles
+        liked_ids = me.liked_articles_id
+    
+    if not item.id in liked_ids: 
+        item.likes += 1
+        item.save()
+        liked.add(item)
+        me.save()
+        item.author.total_likes += 1
+        item.author.save()
 
-    if liked:
-        if like:
-            item.likes += 1
-            item.save()
-            liked.add(item)
-            me.save()
+        return Response({"success": f"You liked this {type}."})
 
-            return Response({"success": f"You liked this {type}."})
+    else:
+        item.likes -= 1
+        item.save()
+        liked.remove(item)
+        me.save()
+        item.author.total_likes -= 1
+        item.author.save()
 
-        else:
-            item.likes -= 1
-            item.save()
-            liked.remove(item)
-            me.save()
-
-            return Response({"success": f"You unliked liked this {type}."})
+        return Response({"success": f"You unliked liked this {type}."})
 
 @api_view(('PATCH',))
 @permission_classes((IsAuthenticated,))
-def like_post(request: HttpRequest, id: str):
+def like_switch_post(request: HttpRequest, id: str):
     return like_or_unlike(request, id)
 
     
-@api_view(('PATCH',))
-@permission_classes((IsAuthenticated,))
-def unlike_post(request: HttpRequest, id: str):
-    return like_or_unlike(request, id, like = False)
-
 
 @api_view(('PATCH',))
 @permission_classes((IsAuthenticated,))
-def like_article(request: HttpRequest, id: str):
+def like_switch_article(request: HttpRequest, id: str):
     return like_or_unlike(request, id, type = "article")
-
-
-@api_view(('PATCH',))
-@permission_classes((IsAuthenticated,))
-def unlike_article(request: HttpRequest, id: str):
-    return like_or_unlike(request, id, type = "article", like = False)
 
 
 class TimelineAPIView(ListAPIView):

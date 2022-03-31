@@ -36,8 +36,7 @@ urlpatterns = [
     path("posts/<str:id>/comments/", views.CommentsAPIView.as_view(), name="post-comments") ,
     # Like a post/comment.
     # It doesn't have to be the own user's post/comment
-    path("posts/<str:id>/like/", views.like_post, name="post-like") ,
-    path("posts/<str:id>/unlike/", views.unlike_post, name="post-like") ,
+    path("posts/<str:id>/like_switch/", views.like_switch_post, name="post-like") ,
     # Add a comment to the refered post.
     # It doesn't have to be the own user's post/comment
     path("posts/<str:id>/comment/", views.CommentCreateAPIView.as_view(), name="post-comment") ,
@@ -48,8 +47,7 @@ urlpatterns = [
     path("articles/<str:id>/comment/", views.CommentArticleAPIView.as_view(), name='article-comment') ,
     # Like an article
     # It doesn't have to be the own user's article
-    path("articles/<str:id>/like/", views.like_article, name='article-like') ,
-    path("articles/<str:id>/unlike/", views.unlike_article, name='article-like') ,
+    path("articles/<str:id>/like_switch/", views.like_switch_article, name='article-like') ,
 
     # Private information on current user
     path("user/", views.MeAPIView.as_view()) ,
