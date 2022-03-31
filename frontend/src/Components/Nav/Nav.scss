@@ -1,0 +1,94 @@
+@import "../../constants";
+
+
+
+#nav-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 80px;
+    background-color: $secondary-color;
+
+    #left-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        #logo {
+            height: 55px;
+            width: 55px;
+            background-color: $main-color;
+            border-radius: 10px;
+        }
+
+        #logo-name p {
+            color: $text-color;
+        }
+
+        #pipe {
+            height: 50px;
+            width: 2px;
+            background-color: $accent-color;
+            margin: 0 0.5em 0 0.5em;
+        }
+
+    }
+
+    #search-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .search-bar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: $main-color;
+            border-radius: 10px;
+            border: 2px solid $accent-color;
+            padding: 0 5px 0 5px;
+
+            input {
+                background: transparent;
+                flex: 1;
+                border: 0;
+                outline: none;
+                color: $text-color;
+            }
+
+            button, #icon-search {
+                color: $text-color;
+                opacity: 0.5;
+                border: 0;
+                background: $main-color;
+                display: flex;
+            }
+        }
+  
+    }
+
+    #right-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn {
+        padding: 5px 10px;
+        margin: 0 10px 0 10px;
+        text-decoration: none;
+        color: $text-color;
+    }
+
+    .btn-account {
+        border: 2px solid $accent-color;
+        border-radius: 10px;
+        transition: ease-in-out 0.2s;
+    }
+
+    .btn-account:hover {
+        border: 2px solid $secondary-color;
+        background-color: $accent-color;
+    }
+
+}
