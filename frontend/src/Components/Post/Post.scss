@@ -1,0 +1,42 @@
+@import "../../constants";
+
+p {
+    color: $text-color;
+}
+
+.post-section {
+    display: flex;
+    justify-content: center;
+
+    #post-container {
+        width: 60%;
+        height: auto;
+        margin-top: 5rem;
+        background-color: $secondary-color;
+
+        .top-post-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+
+            #post-container-top-left {
+                display: flex;
+                align-items: center;
+
+                #logo {
+                    width: 55px;
+                    height: 55px;
+                    border-radius: 99999px;
+                    background-color: #fff;
+                
+                }
+            }
+
+            span, #more-post {
+                color: $text-color;
+            }
+
+        }  
+    } 
+}

@@ -1,5 +1,6 @@
 import React from 'react'
 import './Nav.scss'
+import Logo from "./logo.svg"
 
 const Nav = () => {
   return (
@@ -7,7 +8,7 @@ const Nav = () => {
       <nav id="nav-container">
         <div id="left-container">
           <div id="logo">
-
+            <img src={Logo} className="logo-rs"></img>
           </div>
           <div id="pipe">
             
