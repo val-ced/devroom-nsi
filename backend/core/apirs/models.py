@@ -1,6 +1,7 @@
+from ast import Set
 from random import choices
 import uuid
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from djongo import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
@@ -103,6 +104,15 @@ def add_to_author(sender, instance: Post, created: bool, *args, **kwargs):
             follower.save()
 
 
+@receiver(pre_delete, sender=Post)
+def delete_on_timeline(sender, instance, *args, **kwargs):
+    s = set([instance.id])
+    for _follower in instance.author.followers_id:
+        follower: User = User.objects.get(id=_follower)
+        follower.timeline_posts_id = follower.timeline_posts_id - s
+        follower.save()
+
+
 
 class Article(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -126,3 +136,10 @@ def add_to_author(sender, instance: Article, created: bool, *args, **kwargs):
             follower.save()
 
 
+@receiver(pre_delete, sender=Article)
+def delete_on_timeline(sender, instance, *args, **kwargs):
+    s = set([instance.id])
+    for _follower in instance.author.followers_id:
+        follower: User = User.objects.get(id=_follower)
+        follower.timeline_articles_id = follower.timeline_articles_id - s
+        follower.save()
