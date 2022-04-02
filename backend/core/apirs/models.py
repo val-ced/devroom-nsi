@@ -1,6 +1,6 @@
 from random import choices
 import uuid
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from djongo import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
@@ -101,6 +101,12 @@ def add_to_author(sender, instance: Post, created: bool, *args, **kwargs):
             follower = User.objects.get(id=_f_id)
             follower.timeline_posts.add(instance)
             follower.save()
+
+
+# @receiver(pre_delete, sender=Post)
+# def delete_on_timeline(sender, instance, *args, **kwargs):
+#     for follower in instance.author.followers:
+#         follower.timeline_posts
 
 
 
