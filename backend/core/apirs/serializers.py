@@ -15,6 +15,18 @@ def serialize_user(user: User | None):
 
     return u
 
+
+class DynamicModelSerializer(srz.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        fields = kwargs.pop('fields', None)
+        super().__init__(*args, **kwargs)
+        if fields:
+            allowed = set(fields)
+            existing = self.fields
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
 class UserSerializer(srz.ModelSerializer):
     
     
@@ -61,7 +73,7 @@ class UserSerializer(srz.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('at', 'username', 'bio', 'followers', 'following', 'last_login', 'created_on', 'is_public', 'total_likes', 'articles', 'posts', 'logo', 'total_likes', 'is_active', 'following_url', 'followers_url')
+        fields = ('at', 'username', 'bio', 'followers', 'following', 'last_login', 'created_on', 'is_public', 'total_likes', 'articles', 'posts', 'logo', 'total_likes', 'is_active', 'following_url', 'followers_url', 'timeline_posts', 'timeline_articles')
 
 
 class UserRegisterSerializer(UserSerializer):
@@ -115,7 +127,7 @@ class ArticleSerializer(srz.ModelSerializer):
     comments = srz.SerializerMethodField(read_only=True)
 
     def get_comments(self, instance):
-        return len(instance.comments_id)
+        return len(instance.comments_id) if instance.comments_id else 0
 
 
     def get_author(self, instance):
@@ -131,7 +143,9 @@ class ArticleSerializer(srz.ModelSerializer):
         fields = '__all__'
 
 
-class PostSerializer(srz.ModelSerializer):
+class PostSerializer(DynamicModelSerializer):
+
+
     post_url = srz.HyperlinkedIdentityField(
         view_name='post-detail',
         lookup_field="id"
@@ -146,7 +160,7 @@ class PostSerializer(srz.ModelSerializer):
     comments = srz.SerializerMethodField(read_only=True)
 
     def get_comments(self, instance):
-        return len(instance.comments_id)
+        return len(instance.comments_id) if instance.comments_id else 0
 
 
     def get_parent(self, instance):
@@ -156,6 +170,10 @@ class PostSerializer(srz.ModelSerializer):
 
         return reverse("post-detail", kwargs={"id": instance.parent_id}, request=request)
 
+    type = srz.SerializerMethodField()
+
+    def get_type(self, instance):
+        return instance.type
     
     def get_author(self, instance):
         request = self.context.get("request")
@@ -164,8 +182,14 @@ class PostSerializer(srz.ModelSerializer):
 
         user = User.objects.get(id=instance.author_id)
         return reverse("user-detail", kwargs={"at": user.at}, request=request)
-        
 
     class Meta:
         model = Post
         fields = '__all__'
+
+
+class CreateCommentSerializer(DynamicModelSerializer):
+
+    class Meta:
+        model = Post
+        fields = ('body',)

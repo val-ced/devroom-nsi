@@ -1,3 +1,4 @@
+from random import choices
 import uuid
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -54,6 +55,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     liked_articles = models.ArrayReferenceField(to="Article", default=[], related_name="my_liked_articles", editable=False)
     logo = djm.ImageField(upload_to="logos", default='')
     total_likes = djm.IntegerField(default=0, editable=False)
+    timeline_posts = models.ArrayReferenceField(to="Post", default=[], related_name="timeline_posts", editable=False)
+    timeline_articles = models.ArrayReferenceField(to="Article", default=[], related_name="timeline_articles", editable=False)
+    
 
     USERNAME_FIELD = "at"
     REQUIRED_FIELDS = ["username", "password"]
@@ -72,7 +76,18 @@ class Post(models.Model):
     comments = models.ArrayReferenceField(to="Post", blank=True, related_name="my_comments", on_delete=models.CASCADE)
     date = models.DateTimeField(default=now, editable=False)
     parent = models.ForeignKey(to="Post", related_name="my_parent", on_delete=models.CASCADE, null=True, blank=True)
-    is_public = models.BooleanField(default=True)
+    
+    class _Type(models.TextChoices):
+        POST = 'P', _('Post')
+        COMMENT = 'C', _('Comment') 
+    
+    type = models.CharField(
+        max_length=1,
+        choices=_Type.choices,
+        default=_Type.POST
+    )
+
+    # is_public = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return "<Post %s>" % self.id
@@ -82,6 +97,11 @@ def add_to_author(sender, instance: Post, created: bool, *args, **kwargs):
     if created:
         instance.author.posts_id.add(instance.id)
         instance.author.save()
+        for _f_id in instance.author.followers_id:
+            follower = User.objects.get(id=_f_id)
+            follower.timeline_posts.add(instance)
+            follower.save()
+
 
 
 class Article(models.Model):
@@ -91,7 +111,8 @@ class Article(models.Model):
     body = models.TextField(null=False, blank=False)
     comments = models.ArrayReferenceField(to="Post", blank=True, on_delete=models.CASCADE)
     date = models.DateTimeField(default=now, editable=False)
-    is_public = models.BooleanField(default=True)
+    title = models.TextField(max_length=200, null=False, blank=False, default="Default title")
+    # is_public = models.BooleanField(default=True)
 
 
 @receiver(post_save, sender=Article)
@@ -99,5 +120,9 @@ def add_to_author(sender, instance: Article, created: bool, *args, **kwargs):
     if created:
         instance.author.articles_id.add(instance.id)
         instance.author.save()
+        for _f_id in instance.author.followers_id:
+            follower = User.objects.get(id=_f_id)
+            follower.timeline_articles.add(instance)
+            follower.save()
 
 
