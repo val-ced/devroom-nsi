@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import logo from './logo.svg'
 import './App.scss'
 import Nav from './Components/Nav'
 import Post from './Components/Post'
+import Logout from './Components/Logout'
+
 
 function App() {
 
@@ -11,6 +11,7 @@ function App() {
       <Nav />
       <main>
         <Post />
+        <Logout />
       </main>
     </>
 

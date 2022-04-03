@@ -1,10 +1,12 @@
-from django.http import Http404, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseNotFound
+from datetime import datetime
+from django.http import Http404, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import AnonymousUser
+from django.middleware.csrf import get_token
 from rest_framework.response import Response
 from rest_framework.request import HttpRequest
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView, UpdateAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from .models import Article, Post, User
 from .serializers import ArticleSerializer, CreateCommentSerializer, PostSerializer, UserLessSerializer, UserRegisterSerializer, UserSerializer
@@ -388,3 +390,13 @@ class TimelineArticlesAPIView(ListAPIView):
         user = self.request.user
         articles = [Article.objects.get(id=a) for a in user.timeline_articles_id]
         return articles
+
+@api_view(('GET',))
+def csrf(request: HttpRequest):
+    print(request.get_host)
+
+    res = Response()
+    now = datetime.utcnow()
+    res.set_cookie("csrftoken", get_token(request), expires=now.replace(year=now.year+1).strftime('%a, %d %b %Y %H:%M:%S'), secure=False, samesite="Lax")
+
+    return res

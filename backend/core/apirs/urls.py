@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.urls.conf import re_path
 from django.views.generic import TemplateView
+from django.views.decorators.csrf import csrf_exempt
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework_simplejwt.views import (
@@ -15,6 +16,8 @@ from . import views
 
 urlpatterns = [
     path("", views.routes),
+
+    path("csrf/", views.csrf, name="get-csrf"),
     # Auth
     path('user/auth/token/', TokenObtainPairView.as_view(), name='token-obtain-pair'),
     path('user/auth/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
@@ -82,5 +85,5 @@ urlpatterns = [
     path("user/timeline/articles/", views.TimelineArticlesAPIView.as_view(), name="timeline-articles") ,
     path("user/timeline/posts/", views.TimelinePostsAPIView.as_view(), name="timeline-posts") ,
     # Register a new user
-    path("user/register/", views.UserRegisterAPIView.as_view(), name='user-register') ,
+    path("user/register/", csrf_exempt(views.UserRegisterAPIView.as_view()), name='user-register') ,
 ]

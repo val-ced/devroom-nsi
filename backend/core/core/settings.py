@@ -156,7 +156,7 @@ if not DEBUG:
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ["JWT"],
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }
 
@@ -190,6 +190,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # And use this instead, with the proper urls.
 # CORS_ALLOWED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
