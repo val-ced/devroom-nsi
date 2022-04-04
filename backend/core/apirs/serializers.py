@@ -91,17 +91,13 @@ class UserRegisterSerializer(UserSerializer):
 
     def save(self, **kwargs):
         
-        user = User(
-            at=self.validated_data['at'],
-            username=self.validated_data['username']
-        )
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
 
         if password != password2:
             raise srz.ValidationError({"password": "Passwords must match."})
-        user.set_password(password)
-        user.save()
+        
+        user = User.objects.create_user(at=self.validated_data['at'], username=self.validated_data['username'], password=password)
         return user
 
 

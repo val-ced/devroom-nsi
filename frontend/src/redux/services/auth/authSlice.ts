@@ -62,6 +62,7 @@ const slice = createSlice({
       state.timeoutId = id;
     },
     removeTimeout: (state) => {
+      if (state.timeoutId) clearTimeout(state.timeoutId);
       state.timeoutId = null;
     }
   },
@@ -76,6 +77,8 @@ const slice = createSlice({
         state.access = null;
         state.expires = -1;
         state.isLoggedIn = false;
+        if (state.timeoutId) clearTimeout(state.timeoutId);
+        state.timeoutId = null;
         cookies.remove("access");
         cookies.remove("refresh");
       }
