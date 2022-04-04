@@ -9,16 +9,18 @@ p {
     justify-content: center;
 
     #post-container {
-        width: 60%;
+        max-width: 40rem;
         height: auto;
         margin-top: 5rem;
         background-color: $secondary-color;
+        border-radius: 0.5em;
 
         .top-post-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-direction: row;
+            margin-top: 1rem;
 
             #post-container-top-left {
                 display: flex;
@@ -29,14 +31,37 @@ p {
                     height: 55px;
                     border-radius: 99999px;
                     background-color: #fff;
+                    margin-left: 1rem;
                 
                 }
+
+                #info-user {
+                    margin-left: 0.5rem;
+                }
+
             }
 
             span, #more-post {
                 color: $text-color;
             }
 
-        }  
+            #more-button {
+                background : none;
+                border: none;
+                margin-right: 2rem;
+            }
+
+        }
+        #test {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+
+            #content-post {
+                width: 75%;
+            }
+        }
+        
     } 
 }
