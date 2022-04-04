@@ -11,7 +11,7 @@ const Login = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn)
   useEffect(() => {
     if (!isLoggedIn)
-      csrf(null)
+      csrf()
   }, [])
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, set: React.Dispatch<React.SetStateAction<string>>) => {

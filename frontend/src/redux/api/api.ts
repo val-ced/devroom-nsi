@@ -21,7 +21,7 @@ export const devroomApi = createApi({
         credentials: "include"
       })
     }),
-    getCsrf: builder.mutation({
+    getCsrf: builder.mutation<void, void>({
       query: () => "csrf/"
     })
   })
