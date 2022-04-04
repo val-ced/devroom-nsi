@@ -196,4 +196,5 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_PROFILE_MODULE = 'apirs.User'
 AUTH_USER_MODEL = 'apirs.User'

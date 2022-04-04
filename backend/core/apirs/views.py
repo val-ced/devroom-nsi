@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.request import HttpRequest
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import status
 from .models import Article, Post, User
 from .serializers import ArticleSerializer, CreateCommentSerializer, PostSerializer, UserLessSerializer, UserRegisterSerializer, UserSerializer
 
@@ -24,8 +25,16 @@ def routes(request):
     })
 
 class UserRegisterAPIView(CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserRegisterSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        reg_serializer = UserRegisterSerializer(data=request.data)
+        if reg_serializer.is_valid():
+            newuser = reg_serializer.save()
+            if newuser:
+                return Response(status=status.HTTP_201_CREATED)
+        
+        return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserAPIView(RetrieveAPIView):
     queryset = User.objects.all()
@@ -393,8 +402,6 @@ class TimelineArticlesAPIView(ListAPIView):
 
 @api_view(('GET',))
 def csrf(request: HttpRequest):
-    print(request.get_host)
-
     res = Response()
     now = datetime.utcnow()
     res.set_cookie("csrftoken", get_token(request), expires=now.replace(year=now.year+1).strftime('%a, %d %b %Y %H:%M:%S'), secure=False, samesite="Lax")

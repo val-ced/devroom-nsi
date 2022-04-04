@@ -2,7 +2,7 @@ from django.http import HttpRequest
 from rest_framework import serializers as srz
 from rest_framework.reverse import reverse
 from .models import Article, Post, User
-
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 def serialize_user(user: User | None):
     
@@ -76,7 +76,7 @@ class UserSerializer(srz.ModelSerializer):
         fields = ('at', 'username', 'bio', 'followers', 'following', 'last_login', 'created_on', 'is_public', 'total_likes', 'articles', 'posts', 'logo', 'total_likes', 'is_active', 'following_url', 'followers_url', 'timeline_posts', 'timeline_articles')
 
 
-class UserRegisterSerializer(UserSerializer):
+class UserRegisterSerializer(srz.ModelSerializer):
     password2 = srz.CharField(style={'input_type': 'password'}, write_only=True)
     class Meta:
         model = User
@@ -89,16 +89,16 @@ class UserRegisterSerializer(UserSerializer):
         }
 
 
-    def save(self, **kwargs):
-        
-        password = self.validated_data['password']
-        password2 = self.validated_data['password2']
-
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        password2 = validated_data.pop('password2', None)
         if password != password2:
             raise srz.ValidationError({"password": "Passwords must match."})
-        
-        user = User.objects.create_user(at=self.validated_data['at'], username=self.validated_data['username'], password=password)
-        return user
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
 
 class UserLessSerializer(UserSerializer):

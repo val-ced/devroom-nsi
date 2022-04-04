@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useGetCsrfMutation, useRegisterMutation } from '../redux/api/api'
 import { useLoginMutation } from '../redux/api/apiAuth'
 import { setCredentials } from '../redux/services/auth/authSlice'
+import { RootState } from '../redux/store'
 
 const Login = () => {
 
   const [csrf] = useGetCsrfMutation()
-
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn)
   useEffect(() => {
-    csrf(null)
+    if (!isLoggedIn)
+      csrf(null)
   }, [])
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, set: React.Dispatch<React.SetStateAction<string>>) => {

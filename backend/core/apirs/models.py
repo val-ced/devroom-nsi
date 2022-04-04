@@ -13,14 +13,8 @@ from django.utils.timezone import now
 
 class UserManager(BaseUserManager):
     def create_user(self, at: str, username: str, password: str, **other_fileds):
-        
-        followers = other_fileds.get("followers")
-        following = other_fileds.get("following")
-
-        print(followers, following)
-        
         if not at:
-            raise ValueError(_("You must provide an email adress"))
+            raise ValueError(_("You must provide an at"))
 
         user = self.model(at=at, username=username, **other_fileds)
         user.set_password(password)
@@ -44,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = djm.CharField(max_length=15, null=False)
     bio = djm.TextField(max_length=250)
     is_staff = djm.BooleanField(default=False)
-    is_active = djm.BooleanField(default=False)
+    is_active = djm.BooleanField(default=True)
     is_public = djm.BooleanField(default=True)
     created_on = djm.DateTimeField(null=False, default=now)
     followers = models.ArrayReferenceField(to="self", related_name="my_followers", default=[], blank=True, editable=False)

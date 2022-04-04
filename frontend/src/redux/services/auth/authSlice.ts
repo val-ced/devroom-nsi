@@ -52,6 +52,7 @@ const slice = createSlice({
     logout: (state) => {
       cookies.remove("access");
       cookies.remove("refresh");
+      cookies.remove("csrftoken");
       state.refresh = null;
       state.access = null;
       state.expires = -1;
@@ -81,6 +82,7 @@ const slice = createSlice({
         state.timeoutId = null;
         cookies.remove("access");
         cookies.remove("refresh");
+        cookies.remove("csrftoken");
       }
     );
   }
