@@ -33,6 +33,18 @@ const user = devroomApi.injectEndpoints({
     >({
       query: ({ at, limit }) =>
         `users/${at}/articles/?limit${limit || 10}&offset=${limit || 10}`
+    }),
+    userFollow: builder.mutation<any, string>({
+      query: (at) => ({
+        url: `users/${at}/follow/`,
+        method: "POST"
+      })
+    }),
+    userUnfollow: builder.mutation<any, string>({
+      query: (at) => ({
+        url: `users/${at}/unfollow/`,
+        method: "POST"
+      })
     })
   }),
   overrideExisting: false
@@ -46,5 +58,7 @@ export const {
   useGetUserArticlesQuery,
   useLazyGetUserArticlesQuery,
   useGetUserPostsQuery,
-  useLazyGetUserPostsQuery
+  useLazyGetUserPostsQuery,
+  useUserFollowMutation,
+  useUserUnfollowMutation
 } = user;
