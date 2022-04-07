@@ -138,8 +138,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTIFICATION_CLASSES": [
-        "rest_framework_simplejwt.authentification.JWTAuthentification"
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+                'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,
@@ -155,7 +157,7 @@ if not DEBUG:
     
 
 SIMPLE_JWT = {
-    "AUTH_HEADER_TYPES": ["JWT"],
+    "AUTH_HEADER_TYPES": ('Bearer',),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }

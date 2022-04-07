@@ -19,9 +19,9 @@ urlpatterns = [
 
     path("csrf/", views.csrf, name="get-csrf"),
     # Auth
-    path('user/auth/token/', TokenObtainPairView.as_view(), name='token-obtain-pair'),
-    path('user/auth/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
-    path('user/auth/token/verify/', TokenVerifyView.as_view(), name='token-verify'),
+    path('user/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('user/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('user/auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     # Public information on users
     path("users/<str:at>/", views.UserAPIView.as_view(), name="user-detail") ,
