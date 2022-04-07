@@ -4,11 +4,11 @@ import { Pagination } from "../../Types/Interfaces/Pagination";
 import { User } from "../../Types/Interfaces/User";
 import { devroomApiAuth } from "./apiAuth";
 
-interface PostRequest {
+export interface PostRequest {
   body: string;
 }
 
-interface ArticleRequest {
+export interface ArticleRequest {
   body: string;
   title: string;
 }
@@ -53,7 +53,6 @@ const meApi = devroomApiAuth.injectEndpoints({
       query: (limit) =>
         `user/timeline/articles/?limit${limit || 10}&offset=${limit || 10}`
     }),
-
     newPost: builder.mutation<Post, PostRequest>({
       query: (post) => ({
         url: `user/posts/new/`,
@@ -61,11 +60,37 @@ const meApi = devroomApiAuth.injectEndpoints({
         body: post
       })
     }),
+    editPost: builder.mutation<Post, PostRequest & { uuid: string }>({
+      query: ({ body, uuid }) => ({
+        url: `user/posts/${uuid}/edit/`,
+        method: "PUT",
+        body: { body }
+      })
+    }),
+    deletePost: builder.mutation<void, string>({
+      query: (uuid) => ({
+        url: `user/posts/${uuid}/delete/`,
+        method: "DELETE"
+      })
+    }),
     newArticle: builder.mutation<Article, ArticleRequest>({
       query: (article) => ({
-        url: `user/article/new/`,
+        url: `user/articles/new/`,
         method: "POST",
         body: article
+      })
+    }),
+    editArticle: builder.mutation<Article, ArticleRequest & { uuid: string }>({
+      query: ({ body, title, uuid }) => ({
+        url: `user/articles/${uuid}/edit/`,
+        method: "PUT",
+        body: { body, title }
+      })
+    }),
+    deleteArticle: builder.mutation<void, string>({
+      query: (uuid) => ({
+        url: `user/articles/${uuid}/delete/`,
+        method: "DELETE"
       })
     })
   }),
@@ -75,25 +100,37 @@ const meApi = devroomApiAuth.injectEndpoints({
 export const {
   useGetMeQuery,
   useLazyGetMeQuery,
+
   useGetMeFollowersQuery,
   useLazyGetMeFollowersQuery,
+
   useGetMeFollowingQuery,
   useLazyGetMeFollowingQuery,
+
   useGetMeArticlesQuery,
   useLazyGetMeArticlesQuery,
+
   useGetMePostsQuery,
   useLazyGetMePostsQuery,
+
   useGetMeCommentsQuery,
   useLazyGetMeCommentsQuery,
+
   useGetMePostsLikedQuery,
   useLazyGetMePostsLikedQuery,
   useGetMeArticlesLikedQuery,
   useLazyGetMeArticlesLikedQuery,
+
   useGetMeTLPostsQuery,
   useLazyGetMeTLPostsQuery,
   useGetMeTLArticlesQuery,
   useLazyGetMeTLArticlesQuery,
 
   useNewPostMutation,
-  useNewArticleMutation
+  useEditPostMutation,
+  useDeletePostMutation,
+
+  useNewArticleMutation,
+  useEditArticleMutation,
+  useDeleteArticleMutation
 } = meApi;

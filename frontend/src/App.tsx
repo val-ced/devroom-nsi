@@ -6,13 +6,12 @@ import TmpProfile from './Components/tmp/Profile'
 import { useGetMeQuery } from './redux/api/me'
 import TmpPost from './Components/tmp/Post'
 import TmpArticle from './Components/tmp/Article'
+import NewPost from './Screens/NewPost'
 
 
 function App() {
 
   const { data: dataMe, isError, isLoading, error } = useGetMeQuery()
-  // const { data: dataPost } = useGetPostQuery("fe3383c8-86e3-4289-9f7b-9be4a7797d96")
-  // const { data: dataComments } = useGetArticleCommentsQuery({ uuid: "c48a5fb9-3d88-495c-aa0c-77c7f5694c4c" })
 
   return (
     <>
@@ -21,10 +20,7 @@ function App() {
         <Post />
         <Logout />
         {dataMe && <TmpProfile userData={dataMe} />}
-        {/* {dataPost && <TmpPost postData={dataPost} />}
-        {dataComments && dataComments.results.map(post => { */}
-        {/* return <TmpPost key={post.id} postData={post} />
-        })} */}
+        <NewPost />
       </main>
     </>
 
