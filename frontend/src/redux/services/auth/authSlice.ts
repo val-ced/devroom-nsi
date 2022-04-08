@@ -39,12 +39,14 @@ const slice = createSlice({
       cookies.set("access", access, {
         expires: accEpoch,
         secure: true,
-        sameSite: "lax"
+        sameSite: "lax",
+        path: "/"
       });
       cookies.set("refresh", refresh, {
         expires: refEpoch,
         secure: true,
-        sameSite: "lax"
+        sameSite: "lax",
+        path: "/"
       });
       state.expires = accessD.exp * 1000 - Date.now();
       state.isLoggedIn = true;

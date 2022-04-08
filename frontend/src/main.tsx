@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.scss'
 import App from './App'
@@ -10,16 +9,33 @@ import Routes from './Routes'
 import { Route } from 'react-router-dom'
 import Login from './Screens/Login'
 import Error404 from './Screens/404'
+import NewArticle from './Screens/NewArticle'
+import ArticleScreen from './Screens/ArticleScreen'
+import Articles from './Screens/Articles'
 
 ReactDOM.render(
   <Provider store={store}>
     <CookiesProvider>
       <Routes>
         <Route path="/" element={<Auth />}>
-          <Route index element={<App />} />
-          <Route path="login" element={<Login />} />
+          <Route element={<App />}>
+            <Route index element={<h1>Home</h1>} />
+            <Route path="articles">
+              <Route path="new" element={<NewArticle />} />
+              <Route path=":uuid" element={<ArticleScreen />} />
+            </Route>
+            <Route path="users">
+              <Route path=":at">
+                <Route path="articles">
+                  <Route index element={<Articles />} />
+                  <Route path=":uuid" element={<ArticleScreen />} />
+                </Route>
+              </Route>
+            </Route>
+            <Route path="login" element={<Login />} />
+            <Route path="*" element={<Error404 />} />
+          </Route>
         </Route>
-        <Route path="*" element={<Error404 />} />
       </Routes>
     </CookiesProvider>
   </Provider>,

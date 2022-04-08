@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useRefreshMutation } from './redux/api/apiAuth';
 import { cookies } from './redux/common';
 import { setCredentials, logout, clearAccessToken } from './redux/services/auth/authSlice';
@@ -10,6 +10,7 @@ const Auth: React.FC = ({ children }) => {
   const dispatch = useDispatch()
   const [refreshToken] = useRefreshMutation()
   const { isLoggedIn, expires, access, refresh } = useSelector((state: RootState) => state.auth)
+  const location = useLocation()
 
   const navigate = useNavigate()
 
@@ -40,7 +41,9 @@ const Auth: React.FC = ({ children }) => {
   }, [access, refresh])
 
   useEffect(() => {
-    if (isLoggedIn) navigate("/")
+    if (isLoggedIn) {
+      navigate(/^\/login.*/.test(location.pathname) ? "/" : location.pathname)
+    }
   }, [isLoggedIn])
 
   return (

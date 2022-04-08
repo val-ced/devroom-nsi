@@ -118,6 +118,7 @@ class ArticleSerializer(srz.ModelSerializer):
         lookup_field="id"
     )
 
+    author_url = srz.SerializerMethodField()
     author = srz.SerializerMethodField()
 
     comments = srz.SerializerMethodField(read_only=True)
@@ -126,7 +127,7 @@ class ArticleSerializer(srz.ModelSerializer):
         return len(instance.comments_id) if instance.comments_id else 0
 
 
-    def get_author(self, instance):
+    def get_author_url(self, instance):
         request = self.context.get("request")
         if not instance.author_id or not request:
             return None
@@ -134,6 +135,13 @@ class ArticleSerializer(srz.ModelSerializer):
         user = User.objects.get(id=instance.author_id)
         return reverse("user-detail", kwargs={"at": user.at}, request=request)
 
+    def get_author(self, instance):
+        request = self.context.get("request")
+        if not instance.author_id or not request:
+            return None
+
+        user = User.objects.get(id=instance.author_id)
+        return user.at
     class Meta:
         model = Article
         fields = '__all__'
@@ -151,6 +159,7 @@ class PostSerializer(DynamicModelSerializer):
         lookup_field="id"
     )
     parent = srz.SerializerMethodField()
+    author_url = srz.SerializerMethodField()
     author = srz.SerializerMethodField()
 
     comments = srz.SerializerMethodField(read_only=True)
@@ -171,7 +180,7 @@ class PostSerializer(DynamicModelSerializer):
     def get_type(self, instance):
         return instance.type
     
-    def get_author(self, instance):
+    def get_author_url(self, instance):
         request = self.context.get("request")
         if not instance.author_id or not request:
             return None
@@ -179,6 +188,13 @@ class PostSerializer(DynamicModelSerializer):
         user = User.objects.get(id=instance.author_id)
         return reverse("user-detail", kwargs={"at": user.at}, request=request)
 
+    def get_author(self, instance):
+        request = self.context.get("request")
+        if not instance.author_id or not request:
+            return None
+
+        user = User.objects.get(id=instance.author_id)
+        return user.at
     class Meta:
         model = Post
         fields = '__all__'

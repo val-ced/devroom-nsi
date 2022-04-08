@@ -7,6 +7,7 @@ import { useGetMeQuery } from './redux/api/me'
 import TmpPost from './Components/tmp/Post'
 import TmpArticle from './Components/tmp/Article'
 import NewPost from './Screens/NewPost'
+import { Outlet } from 'react-router-dom'
 
 
 function App() {
@@ -17,10 +18,11 @@ function App() {
     <>
       <Nav />
       <main>
-        <Post />
+        <Outlet />
+        {/* <Post />
         <Logout />
         {dataMe && <TmpProfile userData={dataMe} />}
-        <NewPost />
+        <NewPost /> */}
       </main>
     </>
 

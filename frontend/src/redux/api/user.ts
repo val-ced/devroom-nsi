@@ -29,10 +29,12 @@ const user = devroomApi.injectEndpoints({
     }),
     getUserArticles: builder.query<
       Pagination<Article>,
-      { at: string; limit?: number }
+      { at: string; page?: number; limit?: number }
     >({
-      query: ({ at, limit }) =>
-        `users/${at}/articles/?limit${limit || 10}&offset=${limit || 10}`
+      query: ({ at, page, limit }) =>
+        `users/${at}/articles/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
     userFollow: builder.mutation<any, string>({
       query: (at) => ({
