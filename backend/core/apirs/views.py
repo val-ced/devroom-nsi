@@ -171,14 +171,14 @@ class PostCreateAPIView(CreateAPIView):
         serializer.save(author=self.request.user)
         return Response(serializer.data)
 
-class CommentArticleAPIView(PostCreateAPIView):
-    def perform_create(self, serializer: PostSerializer):
-        article: Article | None = Article.objects.get(id=self.kwargs.get("id"))
-        if article:
-            instance = serializer.save(author=self.request.user, type="C")
-            article.comments.add(instance)
-            article.save()
-            return Response(serializer.data)
+# class CommentArticleAPIView(PostCreateAPIView):
+#     def perform_create(self, serializer: PostSerializer):
+#         article: Article | None = Article.objects.get(id=self.kwargs.get("id"))
+#         if article:
+#             instance = serializer.save(author=self.request.user, type="C")
+#             article.comments.add(instance)
+#             article.save()
+#             return Response(serializer.data)
         
         
 
@@ -243,6 +243,16 @@ class CommentCreateAPIView(CreateAPIView):
             return Response(serializer.data)
         
         raise HttpResponseNotFound
+
+class CommentArticleAPIView(CommentCreateAPIView):
+    queryset = Article.objects.all()
+    def perform_create(self, serializer: CreateCommentSerializer):
+        article: Article | None = Article.objects.get(id=self.kwargs.get("id"))
+        if article:
+            instance = serializer.save(author=self.request.user, type="C")
+            article.comments.add(instance)
+            article.save()
+            return Response(serializer.data)
 
 class ArticleAPIView(RetrieveAPIView):
     queryset = Article.objects.all()

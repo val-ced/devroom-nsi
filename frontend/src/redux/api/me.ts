@@ -18,9 +18,18 @@ const meApi = devroomApiAuth.injectEndpoints({
     getMe: builder.query<User, void>({
       query: () => "user/"
     }),
-    getMeFollowers: builder.query<Pagination<User>, number | void>({
-      query: (limit) =>
-        `user/followers/?limit=${limit || 10}&offset=${limit || 10}`
+    getMeFollowers: builder.query<
+      Pagination<User>,
+      { limit?: number; page?: number } | void
+    >({
+      query: (q) =>
+        `user/followers/${
+          q
+            ? `?limit=${q.limit || 10}&offset=${
+                ((q.page || 1) - 1) * (q.limit || 10)
+              }`
+            : ""
+        }`
     }),
     getMeFollowing: builder.query<Pagination<User>, number | void>({
       query: (limit) =>

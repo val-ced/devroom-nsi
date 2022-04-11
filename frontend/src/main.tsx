@@ -12,6 +12,8 @@ import Error404 from './Screens/404'
 import NewArticle from './Screens/NewArticle'
 import ArticleScreen from './Screens/ArticleScreen'
 import Articles from './Screens/Articles'
+import Posts from './Screens/Posts'
+import PostScreen from './Screens/PostScreen'
 
 ReactDOM.render(
   <Provider store={store}>
@@ -29,6 +31,10 @@ ReactDOM.render(
                 <Route path="articles">
                   <Route index element={<Articles />} />
                   <Route path=":uuid" element={<ArticleScreen />} />
+                </Route>
+                <Route path="posts">
+                  <Route index element={<Posts />} />
+                  <Route path=":uuid" element={<PostScreen />} />
                 </Route>
               </Route>
             </Route>

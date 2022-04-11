@@ -2,9 +2,9 @@ import { Article } from "../../Types/Interfaces/Article";
 import { Post } from "../../Types/Interfaces/Post";
 import { Pagination } from "../../Types/Interfaces/Pagination";
 import { UserLess } from "../../Types/Interfaces/User";
-import { devroomApi } from "./api";
+import { devroomApiAuth } from "./apiAuth";
 
-const user = devroomApi.injectEndpoints({
+const user = devroomApiAuth.injectEndpoints({
   endpoints: (builder) => ({
     getUserFollowers: builder.query<
       Pagination<UserLess>,
@@ -47,6 +47,16 @@ const user = devroomApi.injectEndpoints({
         url: `users/${at}/unfollow/`,
         method: "POST"
       })
+    }),
+    newComment: builder.mutation<
+      Post | Article,
+      { body: string; type: "post" | "article"; uuid: string }
+    >({
+      query: ({ body, uuid, type }) => ({
+        url: `${type}s/${uuid}/comment/`,
+        method: "POST",
+        body: { body }
+      })
     })
   }),
   overrideExisting: false
@@ -62,5 +72,6 @@ export const {
   useGetUserPostsQuery,
   useLazyGetUserPostsQuery,
   useUserFollowMutation,
-  useUserUnfollowMutation
+  useUserUnfollowMutation,
+  useNewCommentMutation
 } = user;

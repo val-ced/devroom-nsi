@@ -158,7 +158,7 @@ class PostSerializer(DynamicModelSerializer):
         view_name="post-comments",
         lookup_field="id"
     )
-    parent = srz.SerializerMethodField()
+    parent_url = srz.SerializerMethodField()
     author_url = srz.SerializerMethodField()
     author = srz.SerializerMethodField()
 
@@ -168,7 +168,7 @@ class PostSerializer(DynamicModelSerializer):
         return len(instance.comments_id) if instance.comments_id else 0
 
 
-    def get_parent(self, instance):
+    def get_parent_url(self, instance):
         request = self.context.get("request")
         if not instance.parent_id or not request:
             return None

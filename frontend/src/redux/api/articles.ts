@@ -11,25 +11,17 @@ const articles = devroomApiAuth.injectEndpoints({
     }),
     getArticleComments: builder.query<
       Pagination<Post>,
-      { uuid: string; limit?: number }
+      { uuid: string; page?: number; limit?: number }
     >({
-      query: ({ uuid, limit }) =>
-        `articles/${uuid}/comments/?limit=${limit || 10}&offset=${limit || 10}`
+      query: ({ uuid, page, limit }) =>
+        `articles/${uuid}/comments/?limit=${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
     articleLikeSwitch: builder.mutation<{ success: string }, string>({
       query: (uuid) => ({
         url: `articles/${uuid}/like_switch/`,
         method: "PATCH"
-      })
-    }),
-    newArticleComment: builder.mutation<
-      Article,
-      ArticleRequest & { uuid: string }
-    >({
-      query: ({ body, title, uuid }) => ({
-        url: `articles/${uuid}/comment/`,
-        method: "POST",
-        body: { body, title }
       })
     })
   }),
@@ -41,6 +33,5 @@ export const {
   useLazyGetArticleQuery,
   useGetArticleCommentsQuery,
   useLazyGetArticleCommentsQuery,
-  useArticleLikeSwitchMutation,
-  useNewArticleCommentMutation
+  useArticleLikeSwitchMutation
 } = articles;
