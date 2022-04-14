@@ -4,17 +4,6 @@ from rest_framework.reverse import reverse
 from .models import Article, Post, User
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-def serialize_user(user: User | None):
-    
-    if not user:
-        return None 
-
-    fields = ["at", "username"]
-
-    u = {key:value for (key, value) in user.__dict__.items() if key in fields}
-
-    return u
-
 
 class DynamicModelSerializer(srz.ModelSerializer):
 
