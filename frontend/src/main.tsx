@@ -14,6 +14,7 @@ import ArticleScreen from './Screens/ArticleScreen'
 import Articles from './Screens/Articles'
 import Posts from './Screens/Posts'
 import PostScreen from './Screens/PostScreen'
+import Home from './Screens/Home'
 
 ReactDOM.render(
   <Provider store={store}>
@@ -21,7 +22,7 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={<Auth />}>
           <Route element={<App />}>
-            <Route index element={<h1>Home</h1>} />
+            <Route index element={<Home />} />
             <Route path="articles">
               <Route path="new" element={<NewArticle />} />
               <Route path=":uuid" element={<ArticleScreen />} />

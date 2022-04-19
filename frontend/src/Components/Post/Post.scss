@@ -12,56 +12,135 @@ p {
         max-width: 40rem;
         height: auto;
         margin-top: 5rem;
+        padding-top: 1rem;
         background-color: $secondary-color;
         border-radius: 0.5em;
+        display: flex;
+        align-items: center;
+        
+    #logo-container {
+        display: flex;
+        margin: 0 1rem 0 1rem;
+        height: 100%;
+        cursor: pointer;
+
+        #logo {
+            width: 55px;
+            height: 55px;
+            border-radius: 99999px;
+            background-color: #fff;
+        }
+    }
+
+    .content-post-container {
+        display: flex;
+        flex-direction: column;
 
         .top-post-container {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            flex-direction: row;
-            margin-top: 1rem;
-
-            #post-container-top-left {
-                display: flex;
-                align-items: center;
-
-                #logo {
-                    width: 55px;
-                    height: 55px;
-                    border-radius: 99999px;
-                    background-color: #fff;
-                    margin-left: 1rem;
-                
-                }
-
-                #info-user {
-                    margin-left: 0.5rem;
-                }
-
-            }
-
-            span, #more-post {
-                color: $text-color;
-            }
-
-            #more-button {
-                background : none;
-                border: none;
-                margin-right: 2rem;
-            }
-
-        }
-        #test {
-            display: flex;
-            justify-content: center;
             align-items: center;
             
+            #date, #at {
+                opacity: 0.5;
+            }
 
-            #content-post {
-                width: 75%;
+            #settings-post {
+                margin-right: 1rem;
+                
+                span, #more-post {
+                    color: $text-color;
+                }
+
+                #more-button {
+                    background : none;
+                    border: none;
+                    cursor: pointer;
+                }
             }
         }
+
+        #content-post {
+            margin-top: 1rem;
+            
+            
+
+            #text-area-post {
+                width: 95%;
+            }
+        }
+
+        #reactions-container {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0 1rem 0;
+            width: 10rem;
+            
+            #icons-reactions {
+                margin-right: .5rem;
+                color: $accent-color;
+                cursor: pointer;
+            }
+            
+            #text-reaction {
+                margin-right: .5rem;
+            }
+        }
+    }
+        
+        
+        
+
+        
+        
+            // .top-post-container {
+        //     display: flex;
+        //     align-items: center;
+        //     justify-content: space-between;
+        //     flex-direction: row;
+        //     margin-top: 1rem;
+
+        //     #logo-container {
+        //         display: flex;
+        //         align-items: center;
+        //         height: 100%;
+
+        //         #logo {
+        //             width: 55px;
+        //             height: 55px;
+        //             border-radius: 99999px;
+        //             background-color: #fff;
+        //             margin-left: 1rem;
+                
+        //         }
+
+        //         #info-user {
+        //             margin-left: 0.5rem;
+        //         }
+
+        //     }
+
+        //     span, #more-post {
+        //         color: $text-color;
+        //     }
+
+        //     #more-button {
+        //         background : none;
+        //         border: none;
+        //         margin-right: 2rem;
+        //     }
+
+        // }
+        // #test {
+        //     display: flex;
+        //     justify-content: center;
+        //     align-items: center;
+            
+
+        //     #content-post {
+        //         width: 75%;
+        //     }
+        // }
         
     } 
 }
