@@ -1,23 +1,24 @@
 import React from 'react'
+import { Post as PostData } from '../../Types/Interfaces/Post'
 import "./Post.scss"
 
-const Post:React.FC = () => {
+const Post: React.FC<PostData> = (post) => {
   return (
     <section className="post-section">
       <div id="post-container">
         <div id="logo-container">
           <div id="logo">
-            
+
           </div>
         </div>
         <div className="content-post-container">
           <div className="top-post-container">
-              <div id="info-user">
-                <p>Pseudo <span id="at">@at</span></p>
-                <p id="date">date of publication</p>
-              </div>
+            <div id="info-user">
+              <p>Username <span id="at">@{post.author}</span></p>
+              <p id="date">{post.date}</p>
+            </div>
             <div id="settings-post">
-              <button id="more-button"> 
+              <button id="more-button">
                 {/* Pense-bête : Ne pas oublier de faire une modal une fois tout le design fini. Voir kevin powell trop simple ^^ */}
                 <span className="material-icons" id="more-post">more_horiz</span>
               </button>
@@ -27,7 +28,7 @@ const Post:React.FC = () => {
           <div id="content-post">
             <div id="text-area-post">
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Et tempora quo nobis quam excepturi minima asperiores sunt eius odit incidunt cumque expedita repellat totam, commodi eaque recusandae laboriosam reiciendis sapiente.
+                {post.body}
               </p>
             </div>
           </div>

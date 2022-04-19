@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, matchPath } from 'react-router-dom'
+import Post from '../Components/Post'
 import NewComment from '../Components/tmp/NewComment'
 import TmpPost from '../Components/tmp/Post'
 import { useGetPostCommentsQuery, useGetPostQuery } from '../redux/api/posts'
-import { Post } from '../Types/Interfaces/Post'
+// import { Post } from '../Types/Interfaces/Post'
 
 const PostScreen: React.FC = () => {
   const { pathname } = useLocation()
@@ -32,7 +33,7 @@ const PostScreen: React.FC = () => {
         <>
           <TmpPost postData={dataPost} />
           <NewComment type="post" uuid={dataPost.id} refetch={refetch} />
-          {dataComments && <div>{dataComments.results.map(comment => <TmpPost key={comment.id} postData={comment} />)}</div>}
+          {dataComments && <div>{dataComments.results.map(comment => <Post key={comment.id} {...comment} />)}</div>}
         </>
       }
     </div>
