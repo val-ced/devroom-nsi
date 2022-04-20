@@ -15,12 +15,6 @@ const posts = devroomApiAuth.injectEndpoints({
         `posts/${uuid}/comments/?limit=${limit || 10}&offset=${
           ((page || 1) - 1) * (limit || 10)
         }`
-    }),
-    postLikeSwitch: builder.mutation<{ success: string }, string>({
-      query: (uuid) => ({
-        url: `articles/${uuid}/like_switch/`,
-        method: "PATCH"
-      })
     })
   }),
   overrideExisting: false
@@ -30,6 +24,5 @@ export const {
   useGetPostQuery,
   useLazyGetPostQuery,
   useGetPostCommentsQuery,
-  useLazyGetPostCommentsQuery,
-  usePostLikeSwitchMutation
+  useLazyGetPostCommentsQuery
 } = posts;

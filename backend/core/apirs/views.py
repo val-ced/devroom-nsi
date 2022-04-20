@@ -345,7 +345,7 @@ def like_or_unlike(request: HttpRequest, id: str, type = "post"):
         item.author.total_likes += 1
         item.author.save()
 
-        return Response({"success": f"You liked this {type}."})
+        return Response({"success": f"You liked this {type}.", "is_liked": True})
 
     else:
         item.likes -= 1
@@ -355,7 +355,7 @@ def like_or_unlike(request: HttpRequest, id: str, type = "post"):
         item.author.total_likes -= 1
         item.author.save()
 
-        return Response({"success": f"You unliked liked this {type}."})
+        return Response({"success": f"You unliked liked this {type}.", "is_liked": False})
 
 @api_view(('PATCH',))
 @permission_classes((IsAuthenticated,))

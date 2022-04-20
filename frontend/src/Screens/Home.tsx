@@ -2,9 +2,10 @@ import React from 'react'
 import Post from '../Components/Post'
 
 
-const Home:React.FC = () => {
+const Home: React.FC = () => {
   return (
-    <Post />
+    // <Post  />
+    <></>
   )
 }
 

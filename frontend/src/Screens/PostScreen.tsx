@@ -31,7 +31,7 @@ const PostScreen: React.FC = () => {
       {errorPost && JSON.stringify(errorPost)}
       {dataPost &&
         <>
-          <TmpPost postData={dataPost} />
+          <Post commentBtn={false} {...dataPost} />
           <NewComment type="post" uuid={dataPost.id} refetch={refetch} />
           {dataComments && <div>{dataComments.results.map(comment => <Post key={comment.id} {...comment} />)}</div>}
         </>

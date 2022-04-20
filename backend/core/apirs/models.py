@@ -48,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # notifications = models.ArrayField()
     liked_posts = models.ArrayReferenceField(to="Post", default=[], related_name="my_liked_posts", editable=False)
     liked_articles = models.ArrayReferenceField(to="Article", default=[], related_name="my_liked_articles", editable=False)
-    logo = djm.ImageField(upload_to="logos", default='')
+    logo = djm.ImageField(upload_to="logos", default='default.png')
     total_likes = djm.IntegerField(default=0, editable=False)
     timeline_posts = models.ArrayReferenceField(to="Post", default=[], related_name="timeline_posts", editable=False)
     timeline_articles = models.ArrayReferenceField(to="Article", default=[], related_name="timeline_articles", editable=False)

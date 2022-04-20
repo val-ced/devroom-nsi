@@ -1,27 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useLikeSwitchMutation } from '../../redux/api/user'
 import { Post as PostData } from '../../Types/Interfaces/Post'
+import MaterialButton from '../MaterialButton'
 import "./Post.scss"
 
-const Post: React.FC<PostData> = (post) => {
+const Post: React.FC<PostData & { likeBtn?: boolean, commentBtn?: boolean }> = ({ likeBtn = true, commentBtn = true, ...post }) => {
+
+  const [likeSwitch] = useLikeSwitchMutation()
+  const [isLiked, setIsLiked] = useState(post.is_liked)
+
+  const handleOnLike = async () => {
+    const res = await likeSwitch({ type: "post", uuid: post.id }).unwrap()
+    setIsLiked(res.is_liked)
+  }
+
   return (
     <section className="post-section">
       <div id="post-container">
         <div id="logo-container">
-          <div id="logo">
-
-          </div>
+          <img src={post.author_meta.logo} alt={`${post.author_meta.at} logo`} id="logo">
+          </img>
         </div>
         <div className="content-post-container">
           <div className="top-post-container">
             <div id="info-user">
-              <p>Username <span id="at">@{post.author}</span></p>
+              <p>{post.author_meta.username} <span id="at">@{post.author_meta.at}</span></p>
               <p id="date">{post.date}</p>
             </div>
             <div id="settings-post">
-              <button id="more-button">
-                {/* Pense-bête : Ne pas oublier de faire une modal une fois tout le design fini. Voir kevin powell trop simple ^^ */}
-                <span className="material-icons" id="more-post">more_horiz</span>
-              </button>
+              <MaterialButton id="more-button" materialSpan={{ id: "more-post" }}>more_horiz</MaterialButton>
+              {/* <button id="more-button"> */}
+              {/* Pense-bête : Ne pas oublier de faire une modal une fois tout le design fini. Voir kevin powell trop simple ^^ */}
+              {/* <span className="material-icons" id="more-post">more_horiz</span>
+              </button> */}
             </div>
           </div>
           {/* End top-post-container */}
@@ -34,8 +45,24 @@ const Post: React.FC<PostData> = (post) => {
           </div>
 
           <div id="reactions-container">
-            <span className="material-icons" id="icons-reactions">favorite</span><p id="text-reaction">like</p>
-            <span className="material-icons" id="icons-reactions">chat_bubble</span><p id="text-reaction">comment</p>
+            {likeBtn &&
+              <MaterialButton
+                materialSpan={{ id: "icons-reactions" }}
+                // A changer le style quand c'est like
+                label={<p id="text-reaction" style={{ color: `${isLiked ? "red" : ""}` }}>Like</p>}
+                onClick={handleOnLike}
+              >
+                favorite
+              </MaterialButton>
+            }
+            {commentBtn &&
+              <MaterialButton
+                materialSpan={{ id: "icons-reactions" }}
+                label={<p id="text-reaction">Comment</p>}
+              >
+                chat_bubble
+              </MaterialButton>
+            }
           </div>
           {/* End reactions-container */}
         </div>
@@ -48,3 +75,4 @@ const Post: React.FC<PostData> = (post) => {
 }
 
 export default Post
+

@@ -57,6 +57,15 @@ const user = devroomApiAuth.injectEndpoints({
         method: "POST",
         body: { body }
       })
+    }),
+    likeSwitch: builder.mutation<
+      { success: string; is_liked: boolean },
+      { type: "post" | "article"; uuid: string }
+    >({
+      query: ({ type, uuid }) => ({
+        url: `${type}s/${uuid}/like_switch/`,
+        method: "PATCH"
+      })
     })
   }),
   overrideExisting: false
@@ -73,5 +82,6 @@ export const {
   useLazyGetUserPostsQuery,
   useUserFollowMutation,
   useUserUnfollowMutation,
-  useNewCommentMutation
+  useNewCommentMutation,
+  useLikeSwitchMutation
 } = user;

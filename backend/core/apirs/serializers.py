@@ -1,4 +1,5 @@
 from django.http import HttpRequest
+from django.contrib.auth.models import AnonymousUser
 from rest_framework import serializers as srz
 from rest_framework.reverse import reverse
 from .models import Article, Post, User
@@ -131,6 +132,8 @@ class ArticleSerializer(srz.ModelSerializer):
 
         user = User.objects.get(id=instance.author_id)
         return user.at
+    
+
     class Meta:
         model = Article
         fields = '__all__'
@@ -148,10 +151,13 @@ class PostSerializer(DynamicModelSerializer):
         lookup_field="id"
     )
     parent_url = srz.SerializerMethodField()
-    author_url = srz.SerializerMethodField()
-    author = srz.SerializerMethodField()
+
+    author_meta = srz.SerializerMethodField()
 
     comments = srz.SerializerMethodField(read_only=True)
+
+    is_liked = srz.SerializerMethodField()
+
 
     def get_comments(self, instance):
         return len(instance.comments_id) if instance.comments_id else 0
@@ -169,24 +175,30 @@ class PostSerializer(DynamicModelSerializer):
     def get_type(self, instance):
         return instance.type
     
-    def get_author_url(self, instance):
-        request = self.context.get("request")
+    def get_author_meta(self, instance):
+        request: HttpRequest = self.context.get("request")
         if not instance.author_id or not request:
             return None
 
         user = User.objects.get(id=instance.author_id)
-        return reverse("user-detail", kwargs={"at": user.at}, request=request)
 
-    def get_author(self, instance):
-        request = self.context.get("request")
-        if not instance.author_id or not request:
-            return None
+        url = reverse("user-detail", kwargs={"at": user.at}, request=request)
+        o = {"at": user.at, "url": url, "username": user.username, "logo": f"{request.scheme}://{request.get_host()}/media/{user.logo}"}
+        return o
+    
 
-        user = User.objects.get(id=instance.author_id)
-        return user.at
+    def get_is_liked(self, instance):
+        request: HttpRequest = self.context.get("request")
+        if isinstance(request.user, AnonymousUser):
+            return False
+        
+
+        user: User = request.user
+        return instance.id in user.liked_posts_id
+
     class Meta:
         model = Post
-        fields = '__all__'
+        exclude = ('author',)
 
 
 class CreateCommentSerializer(DynamicModelSerializer):

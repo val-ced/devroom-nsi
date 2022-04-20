@@ -6,11 +6,11 @@ const NewComment: React.FC<{ type: "article" | "post", uuid: string, refetch: ()
 
   const [newComment] = useNewCommentMutation()
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (commentValue.length > 20) {
-      newComment({ body: commentValue, type, uuid })
+      const newC = await newComment({ body: commentValue, type, uuid }).unwrap()
       refetch()
       setCommentValue("")
     }
