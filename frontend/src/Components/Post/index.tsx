@@ -1,3 +1,4 @@
+import { Temporal } from '@js-temporal/polyfill'
 import React, { useState } from 'react'
 import { useLikeSwitchMutation } from '../../redux/api/user'
 import { Post as PostData } from '../../Types/Interfaces/Post'
@@ -25,7 +26,7 @@ const Post: React.FC<PostData & { likeBtn?: boolean, commentBtn?: boolean }> = (
           <div className="top-post-container">
             <div id="info-user">
               <p>{post.author_meta.username} <span id="at">@{post.author_meta.at}</span></p>
-              <p id="date">{post.date}</p>
+              <p id="date">{Temporal.Instant.from(post.date).toLocaleString()}</p>
             </div>
             <div id="settings-post">
               <MaterialButton id="more-button" materialSpan={{ id: "more-post" }}>more_horiz</MaterialButton>
