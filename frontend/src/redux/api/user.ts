@@ -8,24 +8,30 @@ const user = devroomApiAuth.injectEndpoints({
   endpoints: (builder) => ({
     getUserFollowers: builder.query<
       Pagination<UserLess>,
-      { at: string; limit?: number }
+      { at: string; page?: number; limit?: number }
     >({
-      query: ({ at, limit }) =>
-        `users/${at}/followers/?limit${limit || 10}&offset=${limit || 10}`
+      query: ({ at, page, limit }) =>
+        `users/${at}/followers/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
     getUserFollowing: builder.query<
       Pagination<UserLess>,
-      { at: string; limit?: number }
+      { at: string; page?: number; limit?: number }
     >({
-      query: ({ at, limit }) =>
-        `users/${at}/following/?limit${limit || 10}&offset=${limit || 10}`
+      query: ({ at, page, limit }) =>
+        `users/${at}/following/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
     getUserPosts: builder.query<
       Pagination<Post>,
-      { at: string; limit?: number }
+      { at: string; page?: number; limit?: number }
     >({
-      query: ({ at, limit }) =>
-        `users/${at}/posts/?limit${limit || 10}&offset=${limit || 10}`
+      query: ({ at, page, limit }) =>
+        `users/${at}/posts/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
     getUserArticles: builder.query<
       Pagination<Article>,

@@ -31,36 +31,77 @@ const meApi = devroomApiAuth.injectEndpoints({
             : ""
         }`
     }),
-    getMeFollowing: builder.query<Pagination<User>, number | void>({
-      query: (limit) =>
-        `user/following/?limit${limit || 10}&offset=${limit || 10}`
+    getMeFollowing: builder.query<
+      Pagination<User>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page, limit }) =>
+        `user/following/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
-    getMePosts: builder.query<Pagination<Post>, number | void>({
-      query: (limit) => `user/posts/?limit${limit || 10}&offset=${limit || 10}`
+    getMePosts: builder.query<
+      Pagination<Post>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ limit, page }) =>
+        `user/posts/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
-    getMeArticles: builder.query<Pagination<Article>, number | void>({
-      query: (limit) =>
-        `user/articles/?limit${limit || 10}&offset=${limit || 10}`
+    getMeArticles: builder.query<
+      Pagination<Article>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page, limit }) =>
+        `user/articles/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
-    getMePostsLiked: builder.query<Pagination<Post>, number | void>({
-      query: (limit) =>
-        `user/posts/liked/?limit${limit || 10}&offset=${limit || 10}`
+    getMePostsLiked: builder.query<
+      Pagination<Post>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page, limit }) =>
+        `user/posts/liked/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
-    getMeArticlesLiked: builder.query<Pagination<Article>, number | void>({
-      query: (limit) =>
-        `user/articles/liked/?limit${limit || 10}&offset=${limit || 10}`
+    getMeArticlesLiked: builder.query<
+      Pagination<Article>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page, limit }) =>
+        `user/articles/liked/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
-    getMeComments: builder.query<Pagination<Post>, number | void>({
-      query: (limit) =>
-        `user/comments/?limit${limit || 10}&offset=${limit || 10}`
+    getMeComments: builder.query<
+      Pagination<Post>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page, limit }) =>
+        `user/comments/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
-    getMeTLPosts: builder.query<Pagination<Post>, number | void>({
-      query: (limit) =>
-        `user/timeline/posts/?limit${limit || 10}&offset=${limit || 10}`
+    getMeTLPosts: builder.query<
+      Pagination<Post>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page, limit }) =>
+        `user/timeline/posts/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
-    getMeTLArticles: builder.query<Pagination<Article>, number | void>({
-      query: (limit) =>
-        `user/timeline/articles/?limit${limit || 10}&offset=${limit || 10}`
+    getMeTLArticles: builder.query<
+      Pagination<Article>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page, limit }) =>
+        `user/timeline/articles/?limit${limit || 10}&offset=${
+          ((page || 1) - 1) * (limit || 10)
+        }`
     }),
     newPost: builder.mutation<Post, PostRequest>({
       query: (post) => ({
