@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, matchPath } from 'react-router-dom'
 import Post from '../Components/Post'
 import NewComment from '../Components/tmp/NewComment'
-import TmpPost from '../Components/tmp/Post'
 import { useGetPostCommentsQuery, useGetPostQuery } from '../redux/api/posts'
 // import { Post } from '../Types/Interfaces/Post'
 

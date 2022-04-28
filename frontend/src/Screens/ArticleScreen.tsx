@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import Article from '../Components/Article'
+import Post from '../Components/Post'
 import NewComment from '../Components/tmp/NewComment'
-import TmpPost from '../Components/tmp/Post'
 import { useGetArticleCommentsQuery, useGetArticleQuery } from '../redux/api/articles'
 
 const ArticleScreen: React.FC = () => {
@@ -29,7 +29,7 @@ const ArticleScreen: React.FC = () => {
         <>
           <Article body={dataArticle.body} title={dataArticle.title} />
           <NewComment type="article" uuid={dataArticle.id} refetch={refetch} />
-          {dataComments && dataComments.results.map(comment => <TmpPost key={comment.id} postData={comment} />)}
+          {dataComments && dataComments.results.map(comment => <Post key={comment.id} {...comment} />)}
         </>
       }
     </article>

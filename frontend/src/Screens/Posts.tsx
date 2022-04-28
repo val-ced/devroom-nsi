@@ -1,7 +1,6 @@
 import React from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import Post from '../Components/Post'
-import TmpPost from '../Components/tmp/Post'
 import { useGetUserPostsQuery } from '../redux/api/user'
 
 const Posts: React.FC = () => {
